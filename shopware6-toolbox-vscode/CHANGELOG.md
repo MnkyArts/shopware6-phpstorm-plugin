@@ -5,6 +5,38 @@ All notable changes to the Shopware 6 Toolbox VSCode extension will be documente
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.3.0] - 2025-10-22
+
+### Added
+
+#### Additional Completion Providers (Feature Parity with JetBrains)
+- **SystemConfig completion** for PHP and Twig
+  - Autocomplete system config keys in `SystemConfigService::get()` and `getDomain()`
+  - Parses `config.xml` files to extract configuration keys with namespaces
+  - Shows labels and descriptions for config options
+  
+- **ThemeConfig completion** for Twig
+  - Autocomplete theme configuration keys from `theme.json` files
+  - Shows default values and labels for theme config options
+  - Dynamically indexes theme files from the project
+
+- **AdminMixin completion** for JavaScript/Vue
+  - Autocomplete mixin names in `Mixin.getByName()` calls
+  - Indexes all registered mixins from admin JavaScript files
+  - Provides "Go to Definition" for mixins
+
+### Fixed
+- Corrected implementation to match JetBrains plugin's feature set
+- Added missing completion providers that were in the Java plugin
+- Improved feature parity documentation
+
+### Technical Details
+- Added `advancedCompletionProvider.ts` with three new providers
+- SystemConfigCompletionProvider parses XML config files
+- ThemeConfigCompletionProvider parses JSON theme files
+- AdminMixinCompletionProvider indexes mixin registrations
+- All providers include file watchers for live updates
+
 ## [0.2.0] - 2025-10-22
 
 ### Added

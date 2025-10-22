@@ -13,6 +13,11 @@ import {
     RepositoryCompletionProvider,
     FeatureFlagCompletionProvider
 } from './providers/completionProvider';
+import { 
+    SystemConfigCompletionProvider,
+    ThemeConfigCompletionProvider,
+    AdminMixinCompletionProvider
+} from './providers/advancedCompletionProvider';
 import { SnippetDefinitionProvider } from './providers/definitionProvider';
 import { 
     AdminComponentDefinitionProvider,
@@ -109,6 +114,26 @@ export function activate(context: vscode.ExtensionContext) {
             context.subscriptions.push(
                 vscode.languages.registerCompletionItemProvider('javascript', adminComponentCompletion, "'", '"'),
                 vscode.languages.registerCompletionItemProvider('vue', adminComponentCompletion, "'", '"')
+            );
+
+            // SystemConfig completion for PHP and Twig
+            const systemConfigCompletion = new SystemConfigCompletionProvider();
+            context.subscriptions.push(
+                vscode.languages.registerCompletionItemProvider('php', systemConfigCompletion, "'", '"'),
+                vscode.languages.registerCompletionItemProvider('twig', systemConfigCompletion, "'", '"')
+            );
+
+            // ThemeConfig completion for Twig
+            const themeConfigCompletion = new ThemeConfigCompletionProvider();
+            context.subscriptions.push(
+                vscode.languages.registerCompletionItemProvider('twig', themeConfigCompletion, "'", '"')
+            );
+
+            // AdminMixin completion for JavaScript/Vue
+            const adminMixinCompletion = new AdminMixinCompletionProvider();
+            context.subscriptions.push(
+                vscode.languages.registerCompletionItemProvider('javascript', adminMixinCompletion, "'", '"'),
+                vscode.languages.registerCompletionItemProvider('vue', adminMixinCompletion, "'", '"')
             );
 
             // Definition providers for snippets

@@ -101,6 +101,26 @@ Autocomplete for common Twig functions:
 - `sw_include` - Include templates
 - `sw_extends` - Extend templates
 
+#### System Configuration
+Autocomplete for system config keys in:
+- **PHP**: `SystemConfigService::get('namespace.config.key')`
+- **PHP**: `SystemConfigService::getDomain('namespace')`
+- **Twig**: `config('namespace.config.key')`
+
+Parses `config.xml` files to extract all configuration keys with their namespaces and labels.
+
+#### Theme Configuration
+Autocomplete for theme config keys in:
+- **Twig**: `theme_config('theme.key')`
+
+Parses `theme.json` files to provide theme configuration options with default values.
+
+#### Admin Mixins
+Autocomplete for admin mixins in:
+- **JavaScript/Vue**: `Mixin.getByName('mixin-name')`
+
+Indexes all registered mixins from admin JavaScript files.
+
 #### Repository Factory
 Autocomplete entity names in:
 - `this.repositoryFactory.create('entity_name')`

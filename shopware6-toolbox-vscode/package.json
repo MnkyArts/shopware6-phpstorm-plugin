@@ -1,0 +1,136 @@
+{
+  "name": "shopware6-toolbox",
+  "displayName": "Shopware 6 Toolbox",
+  "description": "Development tools, autocompletion, live templates, and code generators for Shopware 6 development",
+  "version": "0.3.0",
+  "publisher": "shopware",
+  "icon": "icon.svg",
+  "engines": {
+    "vscode": "^1.80.0"
+  },
+  "categories": [
+    "Programming Languages",
+    "Snippets",
+    "Other"
+  ],
+  "keywords": [
+    "shopware",
+    "shopware6",
+    "e-commerce",
+    "php",
+    "twig",
+    "vue"
+  ],
+  "activationEvents": [
+    "workspaceContains:**/composer.json",
+    "onLanguage:php",
+    "onLanguage:twig",
+    "onLanguage:vue",
+    "onLanguage:javascript"
+  ],
+  "main": "./out/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "shopware6.generateAdminComponent",
+        "title": "Shopware 6: Generate Admin Component"
+      },
+      {
+        "command": "shopware6.generateConfig",
+        "title": "Shopware 6: Generate Config XML"
+      },
+      {
+        "command": "shopware6.generateVueModule",
+        "title": "Shopware 6: Generate Vue Module"
+      },
+      {
+        "command": "shopware6.generateScheduledTask",
+        "title": "Shopware 6: Generate Scheduled Task"
+      },
+      {
+        "command": "shopware6.generateChangelog",
+        "title": "Shopware 6: Generate Changelog"
+      },
+      {
+        "command": "shopware6.createPlugin",
+        "title": "Shopware 6: Create New Plugin"
+      }
+    ],
+    "snippets": [
+      {
+        "language": "php",
+        "path": "./snippets/php.json"
+      },
+      {
+        "language": "twig",
+        "path": "./snippets/twig.json"
+      },
+      {
+        "language": "javascript",
+        "path": "./snippets/javascript.json"
+      },
+      {
+        "language": "vue",
+        "path": "./snippets/vue.json"
+      },
+      {
+        "language": "xml",
+        "path": "./snippets/xml.json"
+      }
+    ],
+    "configuration": {
+      "title": "Shopware 6 Toolbox",
+      "properties": {
+        "shopware6.enableAutocompletion": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable/disable autocompletion features"
+        },
+        "shopware6.enableDiagnostics": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable/disable code inspections"
+        },
+        "shopware6.snippetPaths": {
+          "type": "array",
+          "default": [
+            "**/snippet/**/*.json",
+            "**/Resources/snippet/**/*.json"
+          ],
+          "description": "Glob patterns for snippet files"
+        },
+        "shopware6.pluginDirectory": {
+          "type": "string",
+          "default": "custom/plugins",
+          "description": "Default directory for plugins"
+        }
+      }
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "pretest": "npm run compile",
+    "lint": "eslint src --ext ts",
+    "test": "node ./out/test/runTest.js",
+    "package": "vsce package",
+    "publish": "vsce publish"
+  },
+  "devDependencies": {
+    "@types/node": "^20.19.23",
+    "@types/vscode": "^1.105.0",
+    "@vscode/test-electron": "^2.5.2",
+    "typescript": "^5.9.3"
+  },
+  "dependencies": {
+    "fast-xml-parser": "^4.5.3",
+    "glob": "^10.4.5"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/MnkyArts/shopware6-phpstorm-plugin"
+  },
+  "license": "MIT"
+}
+

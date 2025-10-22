@@ -4,3 +4,8 @@
 build
 .intellijPlatform
 /.kotlin
+
+# VSCode Extension
+shopware6-toolbox-vscode/node_modules/
+shopware6-toolbox-vscode/out/
+shopware6-toolbox-vscode/.vscode-test/

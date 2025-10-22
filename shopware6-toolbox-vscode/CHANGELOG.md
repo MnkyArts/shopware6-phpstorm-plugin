@@ -5,6 +5,51 @@ All notable changes to the Shopware 6 Toolbox VSCode extension will be documente
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.2.0] - 2025-10-22
+
+### Added
+
+#### Admin Component Navigation
+- Admin component parser that indexes Shopware admin components
+- "Go to Definition" for admin components (Ctrl+Click on component names)
+- Autocompletion for admin component names in JavaScript/Vue files
+- Component props information in hover documentation
+- File watcher for automatic component re-indexing
+
+#### Twig Block Versioning (CodeLens)
+- CodeLens provider showing Shopware version information for Twig blocks
+- Visual indicators for when blocks were introduced, deprecated, or removed
+- Click on CodeLens to see detailed version information
+- Helps developers understand block compatibility across Shopware versions
+
+#### Code Diagnostics and Inspections
+- Real-time code diagnostics for PHP files
+- Detection of abstract class instantiation errors
+- Warnings for deprecated method usage
+- Checks for container service locator anti-patterns
+- Configurable via `shopware6.enableDiagnostics` setting
+- Diagnostics update on file open, save, and change (debounced)
+
+#### Feature Flag Autocompletion
+- Autocompletion for Shopware feature flags
+- Works in PHP (`Feature::isActive()`), JavaScript/Vue (`Feature.isActive()`), and Twig (`feature()`)
+- Includes 20+ common Shopware feature flags
+- Shows flag name and description on hover
+
+### Changed
+- Updated extension version to 0.2.0
+- Enhanced completion providers with additional context-aware suggestions
+- Improved file watchers to include admin component files
+
+### Technical Details
+- Added `AdminComponentParser` for parsing Vue.js admin components
+- Added `AdminComponentDefinitionProvider` for component navigation
+- Added `AdminComponentCompletionProvider` for component suggestions
+- Added `TwigBlockCodeLensProvider` for Twig block versioning
+- Added `ShopwareDiagnosticsProvider` for code inspections
+- Added `FeatureFlagCompletionProvider` for feature flag suggestions
+- All new features integrate seamlessly with existing providers
+
 ## [0.1.0] - 2025-10-22
 
 ### Added
@@ -55,4 +100,5 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Uses glob for file pattern matching
 - Implements VSCode's Completion, Definition, and other provider APIs
 
+[0.2.0]: https://github.com/MnkyArts/shopware6-phpstorm-plugin/releases/tag/vscode-0.2.0
 [0.1.0]: https://github.com/MnkyArts/shopware6-phpstorm-plugin/releases/tag/vscode-0.1.0

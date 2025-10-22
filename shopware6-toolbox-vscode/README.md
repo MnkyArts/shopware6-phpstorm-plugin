@@ -87,6 +87,12 @@ Autocomplete snippet keys in:
 
 The extension automatically parses your project's snippet JSON files and provides suggestions.
 
+#### Admin Components
+- **Autocompletion** for admin component names in JavaScript/Vue files
+- **Go to Definition** (F12 / Ctrl+Click) for component references
+- Shows component props and extends information
+- Automatically indexes components from your project
+
 #### Storefront Twig Functions
 Autocomplete for common Twig functions:
 - `theme_config('key')` - Get theme configuration
@@ -101,10 +107,39 @@ Autocomplete entity names in:
 
 Common entities included: product, category, customer, order, sales_channel, etc.
 
+#### Feature Flags
+Autocomplete Shopware feature flags in:
+- **PHP**: `Feature::isActive('FEATURE_NEXT_...')`
+- **JavaScript/Vue**: `Feature.isActive('FEATURE_NEXT_...')`
+- **Twig**: `feature('FEATURE_NEXT_...')`
+
+Includes 20+ common feature flags with descriptions.
+
+### 📊 Twig Block Versioning (CodeLens)
+
+Visual indicators for Twig blocks showing Shopware version information:
+- **Block introduction version** - When the block was added to Shopware
+- **Deprecation warnings** - If a block is deprecated
+- **Removal notices** - If a block has been removed
+
+Click on the CodeLens to see detailed version information. Helps you understand block compatibility across different Shopware versions.
+
+### 🔍 Code Diagnostics & Inspections
+
+Real-time code analysis for PHP files:
+- **Abstract class instantiation** - Detects when abstract classes are instantiated directly
+- **Deprecated method usage** - Warns about deprecated Shopware methods
+- **Service locator anti-patterns** - Identifies improper use of container->get()
+- **Configurable** - Enable/disable via settings
+
+Diagnostics appear as underlines in your code with detailed explanations.
+
 ### 🔗 Navigation
 
 - **Go to Definition** for snippet keys (Ctrl+Click or F12)
+- **Go to Definition** for admin components
 - Jump to snippet definition files
+- Jump to component source files
 - Quick navigation between related files
 
 ## Requirements

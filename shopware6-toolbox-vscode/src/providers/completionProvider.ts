@@ -148,3 +148,69 @@ export class RepositoryCompletionProvider implements vscode.CompletionItemProvid
         });
     }
 }
+
+export class FeatureFlagCompletionProvider implements vscode.CompletionItemProvider {
+    private featureFlags = [
+        'FEATURE_NEXT_1797',
+        'FEATURE_NEXT_6040',
+        'FEATURE_NEXT_10549',
+        'FEATURE_NEXT_10555',
+        'FEATURE_NEXT_12455',
+        'FEATURE_NEXT_13504',
+        'FEATURE_NEXT_14114',
+        'FEATURE_NEXT_14408',
+        'FEATURE_NEXT_15053',
+        'FEATURE_NEXT_15815',
+        'FEATURE_NEXT_16710',
+        'FEATURE_NEXT_17261',
+        'FEATURE_NEXT_18215',
+        'FEATURE_NEXT_19048',
+        'FEATURE_NEXT_19822',
+        'FEATURE_NEXT_20598',
+        'FEATURE_NEXT_21547',
+        'FEATURE_NEXT_22900'
+    ];
+
+    async provideCompletionItems(
+        document: vscode.TextDocument,
+        position: vscode.Position,
+        token: vscode.CancellationToken,
+        context: vscode.CompletionContext
+    ): Promise<vscode.CompletionItem[]> {
+        const linePrefix = document.lineAt(position).text.substr(0, position.character);
+        
+        // Check if we're in a feature flag context
+        if (!this.isFeatureFlagContext(linePrefix, document.languageId)) {
+            return [];
+        }
+
+        return this.featureFlags.map(flag => {
+            const item = new vscode.CompletionItem(flag, vscode.CompletionItemKind.Constant);
+            item.detail = 'Feature Flag';
+            item.documentation = `Shopware feature flag: ${flag}`;
+            item.insertText = flag;
+            return item;
+        });
+    }
+
+    private isFeatureFlagContext(linePrefix: string, languageId: string): boolean {
+        // PHP: Feature::isActive('...')
+        if (languageId === 'php') {
+            return /Feature::isActive\(['"]/.test(linePrefix) ||
+                   /->isActive\(['"]/.test(linePrefix);
+        }
+
+        // JavaScript/Vue: Feature.isActive('...') or this.feature.isActive('...')
+        if (languageId === 'javascript' || languageId === 'vue') {
+            return /Feature\.isActive\(['"]/.test(linePrefix) ||
+                   /feature\.isActive\(['"]/.test(linePrefix);
+        }
+
+        // Twig: feature('...')
+        if (languageId === 'twig') {
+            return /feature\(['"]/.test(linePrefix);
+        }
+
+        return false;
+    }
+}

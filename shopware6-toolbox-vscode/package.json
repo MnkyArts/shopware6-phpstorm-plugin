@@ -2,7 +2,7 @@
   "name": "shopware6-toolbox",
   "displayName": "Shopware 6 Toolbox",
   "description": "Development tools, autocompletion, live templates, and code generators for Shopware 6 development",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "publisher": "shopware",
   "icon": "icon.svg",
   "engines": {

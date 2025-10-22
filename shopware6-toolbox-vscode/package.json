@@ -4,7 +4,7 @@
   "description": "Development tools, autocompletion, live templates, and code generators for Shopware 6 development",
   "version": "0.1.0",
   "publisher": "shopware",
-  "icon": "icon.png",
+  "icon": "icon.svg",
   "engines": {
     "vscode": "^1.80.0"
   },

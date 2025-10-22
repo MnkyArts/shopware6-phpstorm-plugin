@@ -1,0 +1,11 @@
+{
+  "Shopware PHP Deprecation": {
+    "prefix": "sw-php-deprecation",
+    "body": [
+      "/**",
+      " * @deprecated tag:v6.7.0 - ${1:description}",
+      " */"
+    ],
+    "description": "Add a deprecation to a function / method / class"
+  }
+}

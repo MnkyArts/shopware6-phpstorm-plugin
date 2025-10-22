@@ -1,0 +1,170 @@
+{
+  "Shopware Config Base": {
+    "prefix": "sw-config-base",
+    "body": [
+      "<?xml version=\"1.0\" encoding=\"UTF-8\"?>",
+      "<config xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"",
+      "        xsi:noNamespaceSchemaLocation=\"https://raw.githubusercontent.com/shopware/platform/trunk/src/Core/System/SystemConfig/Schema/config.xsd\">",
+      "",
+      "    <card>",
+      "        <title>${1:Card Title}</title>",
+      "",
+      "        ${2:<!-- Add input fields here -->}",
+      "    </card>",
+      "</config>"
+    ],
+    "description": "Create base config.xml structure"
+  },
+  "Shopware Config Element Bool": {
+    "prefix": "sw-config-element-bool",
+    "body": [
+      "<input-field type=\"bool\">",
+      "    <name>${1:fieldName}</name>",
+      "    <label>${2:Field Label}</label>",
+      "</input-field>"
+    ],
+    "description": "Add boolean input field"
+  },
+  "Shopware Config Element Checkbox": {
+    "prefix": "sw-config-element-checkbox",
+    "body": [
+      "<input-field type=\"checkbox\">",
+      "    <name>${1:fieldName}</name>",
+      "    <label>${2:Field Label}</label>",
+      "</input-field>"
+    ],
+    "description": "Add checkbox input field"
+  },
+  "Shopware Config Element Text": {
+    "prefix": "sw-config-element-text",
+    "body": [
+      "<input-field type=\"text\">",
+      "    <name>${1:fieldName}</name>",
+      "    <label>${2:Field Label}</label>",
+      "</input-field>"
+    ],
+    "description": "Add text input field"
+  },
+  "Shopware Config Element Textarea": {
+    "prefix": "sw-config-element-textarea",
+    "body": [
+      "<input-field type=\"textarea\">",
+      "    <name>${1:fieldName}</name>",
+      "    <label>${2:Field Label}</label>",
+      "</input-field>"
+    ],
+    "description": "Add textarea input field"
+  },
+  "Shopware Config Element Text Editor": {
+    "prefix": "sw-config-element-text-editor",
+    "body": [
+      "<input-field type=\"text-editor\">",
+      "    <name>${1:fieldName}</name>",
+      "    <label>${2:Field Label}</label>",
+      "</input-field>"
+    ],
+    "description": "Add text editor input field"
+  },
+  "Shopware Config Element URL": {
+    "prefix": "sw-config-element-url",
+    "body": [
+      "<input-field type=\"url\">",
+      "    <name>${1:fieldName}</name>",
+      "    <label>${2:Field Label}</label>",
+      "</input-field>"
+    ],
+    "description": "Add URL input field"
+  },
+  "Shopware Config Element Password": {
+    "prefix": "sw-config-element-password",
+    "body": [
+      "<input-field type=\"password\">",
+      "    <name>${1:fieldName}</name>",
+      "    <label>${2:Field Label}</label>",
+      "</input-field>"
+    ],
+    "description": "Add password input field"
+  },
+  "Shopware Config Element Int": {
+    "prefix": "sw-config-element-int",
+    "body": [
+      "<input-field type=\"int\">",
+      "    <name>${1:fieldName}</name>",
+      "    <label>${2:Field Label}</label>",
+      "</input-field>"
+    ],
+    "description": "Add integer input field"
+  },
+  "Shopware Config Element Float": {
+    "prefix": "sw-config-element-float",
+    "body": [
+      "<input-field type=\"float\">",
+      "    <name>${1:fieldName}</name>",
+      "    <label>${2:Field Label}</label>",
+      "</input-field>"
+    ],
+    "description": "Add float input field"
+  },
+  "Shopware Config Element Date": {
+    "prefix": "sw-config-element-date",
+    "body": [
+      "<input-field type=\"date\">",
+      "    <name>${1:fieldName}</name>",
+      "    <label>${2:Field Label}</label>",
+      "</input-field>"
+    ],
+    "description": "Add date input field"
+  },
+  "Shopware Config Element Datetime": {
+    "prefix": "sw-config-element-datetime",
+    "body": [
+      "<input-field type=\"datetime\">",
+      "    <name>${1:fieldName}</name>",
+      "    <label>${2:Field Label}</label>",
+      "</input-field>"
+    ],
+    "description": "Add datetime input field"
+  },
+  "Shopware Config Element Time": {
+    "prefix": "sw-config-element-time",
+    "body": [
+      "<input-field type=\"time\">",
+      "    <name>${1:fieldName}</name>",
+      "    <label>${2:Field Label}</label>",
+      "</input-field>"
+    ],
+    "description": "Add time input field"
+  },
+  "Shopware Config Element Colorpicker": {
+    "prefix": "sw-config-element-colorpicker",
+    "body": [
+      "<input-field type=\"colorpicker\">",
+      "    <name>${1:fieldName}</name>",
+      "    <label>${2:Field Label}</label>",
+      "</input-field>"
+    ],
+    "description": "Add colorpicker input field"
+  },
+  "Shopware Config Element Single Select": {
+    "prefix": "sw-config-element-single-select",
+    "body": [
+      "<input-field type=\"single-select\">",
+      "    <name>${1:fieldName}</name>",
+      "    <label>${2:Field Label}</label>",
+      "    <entity>${3:entityName}</entity>",
+      "</input-field>"
+    ],
+    "description": "Add single-select input field"
+  },
+  "Shopware Config Element Multi Select": {
+    "prefix": "sw-config-element-multi-select",
+    "body": [
+      "<input-field type=\"multi-select\">",
+      "    <name>${1:fieldName}</name>",
+      "    <label>${2:Field Label}</label>",
+      "    <entity>${3:entityName}</entity>",
+      "</input-field>"
+    ],
+    "description": "Add multi-select input field"
+  }
+}

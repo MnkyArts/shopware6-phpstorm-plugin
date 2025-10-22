@@ -1,0 +1,9 @@
+{
+  "Shopware UUID": {
+    "prefix": "sw-uuid",
+    "body": [
+      "${1:${RANDOM_HEX}}"
+    ],
+    "description": "Generate a valid UUID (32 character hex string without dashes)"
+  }
+}

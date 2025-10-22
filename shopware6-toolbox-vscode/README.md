@@ -118,11 +118,12 @@ Includes 20+ common feature flags with descriptions.
 ### 📊 Twig Block Versioning (CodeLens)
 
 Visual indicators for Twig blocks showing Shopware version information:
-- **Block introduction version** - When the block was added to Shopware
-- **Deprecation warnings** - If a block is deprecated
-- **Removal notices** - If a block has been removed
+- **Dynamic indexing** - Automatically scans Shopware vendor files for block versions
+- **Version tracking** - Shows version from `{# shopware-block: hash@version #}` comments
+- **Deprecation warnings** - Detects `@deprecated` annotations above blocks
+- **Hash tracking** - Monitors block content changes via hash comparisons
 
-Click on the CodeLens to see detailed version information. Helps you understand block compatibility across different Shopware versions.
+Click on the CodeLens to see detailed version information. The extension parses actual Shopware source files (like the JetBrains plugin) rather than using a static list, ensuring accurate version information.
 
 ### 🔍 Code Diagnostics & Inspections
 

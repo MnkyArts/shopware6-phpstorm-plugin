@@ -18,9 +18,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 #### Twig Block Versioning (CodeLens)
 - CodeLens provider showing Shopware version information for Twig blocks
-- Visual indicators for when blocks were introduced, deprecated, or removed
-- Click on CodeLens to see detailed version information
-- Helps developers understand block compatibility across Shopware versions
+- **Dynamically indexes** Twig blocks from Shopware vendor/src directories
+- **Parses versioning comments** in format `{# shopware-block: hash@version #}`
+- **Detects deprecation** from `@deprecated` annotations
+- Click on CodeLens to see detailed version and hash information
+- Mimics JetBrains plugin's FileBasedIndex approach for consistency
 
 #### Code Diagnostics and Inspections
 - Real-time code diagnostics for PHP files

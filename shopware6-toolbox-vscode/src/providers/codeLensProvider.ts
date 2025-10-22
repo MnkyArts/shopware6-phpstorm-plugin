@@ -1,20 +1,107 @@
 import * as vscode from 'vscode';
+import * as path from 'path';
 
-// Twig block version data - this would ideally come from Shopware's version data
-// For now, we'll use a sample dataset
-const BLOCK_VERSIONS: Record<string, { introduced?: string; deprecated?: string; removed?: string }> = {
-    'base_main': { introduced: '6.0.0' },
-    'base_header': { introduced: '6.0.0' },
-    'base_navigation': { introduced: '6.0.0' },
-    'page_checkout_cart': { introduced: '6.1.0' },
-    'page_checkout_confirm': { introduced: '6.1.0' },
-    'component_product_box': { introduced: '6.0.0', deprecated: '6.5.0' },
-    // Add more blocks as needed
-};
+interface BlockVersionInfo {
+    version?: string;
+    hash?: string;
+    deprecated?: string;
+    deprecationMessage?: string;
+}
 
 export class TwigBlockCodeLensProvider implements vscode.CodeLensProvider {
     private _onDidChangeCodeLenses: vscode.EventEmitter<void> = new vscode.EventEmitter<void>();
     public readonly onDidChangeCodeLenses: vscode.Event<void> = this._onDidChangeCodeLenses.event;
+    private blockVersionCache: Map<string, Map<string, BlockVersionInfo>> = new Map();
+
+    constructor() {
+        this.indexShopwareBlocks();
+    }
+
+    /**
+     * Index Shopware blocks from vendor/src directories
+     * This mimics the JetBrains plugin's FileBasedIndex approach
+     */
+    private async indexShopwareBlocks(): Promise<void> {
+        const workspaceFolders = vscode.workspace.workspaceFolders;
+        if (!workspaceFolders) {
+            return;
+        }
+
+        // Find Twig files in Shopware storefront
+        const twigFiles = await vscode.workspace.findFiles(
+            '**/vendor/shopware/storefront/Resources/views/**/*.twig',
+            '**/node_modules/**'
+        );
+
+        // Also check src/Storefront for project files
+        const srcFiles = await vscode.workspace.findFiles(
+            '**/src/Storefront/Resources/views/**/*.twig',
+            '**/node_modules/**'
+        );
+
+        const allFiles = [...twigFiles, ...srcFiles];
+
+        for (const file of allFiles) {
+            await this.parseBlockVersions(file);
+        }
+    }
+
+    /**
+     * Parse Twig blocks and their versioning comments from a file
+     * Looks for patterns like: {# shopware-block: hash@version #}
+     * and {# @deprecated tag:v6.x.0 - message #}
+     */
+    private async parseBlockVersions(file: vscode.Uri): Promise<void> {
+        try {
+            const content = await vscode.workspace.fs.readFile(file);
+            const text = Buffer.from(content).toString('utf8');
+            const relativePath = this.getRelativePath(file.fsPath);
+
+            if (!this.blockVersionCache.has(relativePath)) {
+                this.blockVersionCache.set(relativePath, new Map());
+            }
+
+            const fileBlocks = this.blockVersionCache.get(relativePath)!;
+
+            // Match blocks with their preceding comments
+            // Pattern: optional comment, then {% block name %}
+            const blockPattern = /(?:\{#([^}]*?)#\}\s*)?\{%\s*block\s+([a-zA-Z0-9_]+)\s*%\}/g;
+            let match;
+
+            while ((match = blockPattern.exec(text)) !== null) {
+                const comment = match[1];
+                const blockName = match[2];
+
+                const versionInfo: BlockVersionInfo = {};
+
+                if (comment) {
+                    // Check for shopware-block versioning comment
+                    const versionMatch = comment.match(/shopware-block:\s*([a-f0-9]+)@([\d.]+)/);
+                    if (versionMatch) {
+                        versionInfo.hash = versionMatch[1];
+                        versionInfo.version = versionMatch[2];
+                    }
+
+                    // Check for deprecation
+                    const deprecatedMatch = comment.match(/@deprecated\s+tag:v([\d.]+)(?:\s+-\s+(.*))?/);
+                    if (deprecatedMatch) {
+                        versionInfo.deprecated = deprecatedMatch[1];
+                        versionInfo.deprecationMessage = deprecatedMatch[2]?.trim() || '';
+                    }
+                }
+
+                fileBlocks.set(blockName, versionInfo);
+            }
+        } catch (error) {
+            console.error(`Error parsing block versions from ${file.fsPath}:`, error);
+        }
+    }
+
+    private getRelativePath(filePath: string): string {
+        // Extract path relative to Resources/views/
+        const match = filePath.match(/Resources\/views\/(.+)/);
+        return match ? match[1] : filePath;
+    }
 
     async provideCodeLenses(
         document: vscode.TextDocument,
@@ -22,6 +109,7 @@ export class TwigBlockCodeLensProvider implements vscode.CodeLensProvider {
     ): Promise<vscode.CodeLens[]> {
         const codeLenses: vscode.CodeLens[] = [];
         const text = document.getText();
+        const relativePath = this.getRelativePath(document.uri.fsPath);
 
         // Match Twig block definitions: {% block block_name %}
         const blockRegex = /\{%\s*block\s+([a-zA-Z0-9_]+)\s*%\}/g;
@@ -29,29 +117,44 @@ export class TwigBlockCodeLensProvider implements vscode.CodeLensProvider {
 
         while ((match = blockRegex.exec(text)) !== null) {
             const blockName = match[1];
-            const versionInfo = BLOCK_VERSIONS[blockName];
+            
+            // Look for version info in the indexed blocks
+            let versionInfo: BlockVersionInfo | undefined;
+            
+            // First check the current file
+            const fileBlocks = this.blockVersionCache.get(relativePath);
+            if (fileBlocks) {
+                versionInfo = fileBlocks.get(blockName);
+            }
 
-            if (versionInfo) {
+            // If not found, search all indexed blocks for this block name
+            if (!versionInfo) {
+                for (const [path, blocks] of this.blockVersionCache) {
+                    if (blocks.has(blockName)) {
+                        versionInfo = blocks.get(blockName);
+                        break;
+                    }
+                }
+            }
+
+            if (versionInfo && (versionInfo.version || versionInfo.deprecated)) {
                 const position = document.positionAt(match.index);
                 const range = new vscode.Range(position, position);
 
                 let versionText = '';
                 const versionParts: string[] = [];
 
-                if (versionInfo.introduced) {
-                    versionParts.push(`introduced in v${versionInfo.introduced}`);
+                if (versionInfo.version) {
+                    versionParts.push(`v${versionInfo.version}`);
                 }
                 if (versionInfo.deprecated) {
-                    versionParts.push(`deprecated in v${versionInfo.deprecated}`);
-                }
-                if (versionInfo.removed) {
-                    versionParts.push(`removed in v${versionInfo.removed}`);
+                    versionParts.push(`⚠️ deprecated in v${versionInfo.deprecated}`);
                 }
 
                 versionText = versionParts.join(', ');
 
                 const codeLens = new vscode.CodeLens(range, {
-                    title: `📦 Block: ${blockName} (${versionText})`,
+                    title: `📦 ${blockName} (${versionText})`,
                     command: 'shopware6.showBlockInfo',
                     arguments: [blockName, versionInfo]
                 });
@@ -64,6 +167,8 @@ export class TwigBlockCodeLensProvider implements vscode.CodeLensProvider {
     }
 
     refresh(): void {
+        this.blockVersionCache.clear();
+        this.indexShopwareBlocks();
         this._onDidChangeCodeLenses.fire();
     }
 }
@@ -75,14 +180,21 @@ export function registerShowBlockInfoCommand(context: vscode.ExtensionContext): 
             (blockName: string, versionInfo: any) => {
                 let message = `**Twig Block: ${blockName}**\n\n`;
 
-                if (versionInfo.introduced) {
-                    message += `✅ Introduced in Shopware v${versionInfo.introduced}\n`;
+                if (versionInfo.version) {
+                    message += `📦 Version: Shopware v${versionInfo.version}\n`;
+                }
+                if (versionInfo.hash) {
+                    message += `🔑 Hash: ${versionInfo.hash.substring(0, 8)}...\n`;
                 }
                 if (versionInfo.deprecated) {
-                    message += `⚠️ Deprecated in Shopware v${versionInfo.deprecated}\n`;
+                    message += `⚠️ **Deprecated** in v${versionInfo.deprecated}\n`;
+                    if (versionInfo.deprecationMessage) {
+                        message += `   ${versionInfo.deprecationMessage}\n`;
+                    }
                 }
-                if (versionInfo.removed) {
-                    message += `❌ Removed in Shopware v${versionInfo.removed}\n`;
+
+                if (!versionInfo.version && !versionInfo.deprecated) {
+                    message += `ℹ️ No version information available for this block.\n`;
                 }
 
                 vscode.window.showInformationMessage(message);
